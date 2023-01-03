@@ -12,7 +12,7 @@
 
         <!-- is user is login -->
         <router-link to="#" class="text-white mr-3">
-          使用者 您好
+          {{ currentUser.name || '使用者' }} 您好
         </router-link>
         <button type="button" class="btn btn-sm btn-outline-success my-2 my-sm-0">
           登出
