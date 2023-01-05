@@ -20,14 +20,38 @@
         </p>
       </div>
       <div class="card-footer">
-        <button type="button" class="btn btn-danger btn-border favorite mr-2">
+        <button
+          type="button"
+          class="btn btn-danger btn-border favorite mr-2"
+          v-if="restaruant.isFavorited"
+          @click="deleteFavorited"
+        >
           移除最愛
         </button>
-        <button type="button" class="btn btn-primary btn-border favorite mr-2">
+        <button
+          type="button"
+          class="btn btn-primary btn-border favorite mr-2"
+          v-else
+          @click="addFavorited"
+        >
           加到最愛
         </button>
-        <button type="button" class="btn btn-danger like mr-2">Unlike</button>
-        <button type="button" class="btn btn-primary like mr-2">Like</button>
+        <button
+          type="button"
+          class="btn btn-danger like mr-2"
+          v-if="restaruant.isLiked"
+          @click="deleteLiked"
+        >
+          Unlike
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary like mr-2"
+          v-else
+          @click="addLiked"
+        >
+          Like
+        </button>
       </div>
     </div>
   </div>
@@ -45,6 +69,32 @@ export default {
     return {
       restaruant: this.initialrestaurant,
     };
+  },
+  methods: {
+    addFavorited() {
+      this.restaruant = {
+        ...this.restaruant,
+        isFavorited: true,
+      };
+    },
+    deleteFavorited() {
+      this.restaruant = {
+        ...this.restaruant,
+        isFavorited: false,
+      };
+    },
+    addLiked() {
+      this.restaruant = {
+        ...this.restaruant,
+        isLiked: true,
+      };
+    },
+    deleteLiked() {
+      this.restaruant = {
+        ...this.restaruant,
+        isLiked: false,
+      };
+    },
   },
 };
 </script>

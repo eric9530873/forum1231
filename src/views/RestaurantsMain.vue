@@ -2,6 +2,7 @@
   <div class="container py-5">
     <NavTabs />
     <!-- 餐廳類別標籤 RestaurantsNavPills -->
+    <RestaurantsNavPillsVue :categories="categories" />
 
     <div class="row">
       <!-- 餐廳卡片 RestaurantCard-->
@@ -13,6 +14,13 @@
     </div>
 
     <!-- 分頁標籤 RestaurantPagination -->
+    <RestaurantsPagination
+      :currentPage="currentPage"
+      :totalPage="totalPage"
+      :previouPage="previouPage"
+      :nextPage="nextPage"
+      :categoryId="categoryId"
+    />
   </div>
 </template>
 
@@ -20,6 +28,8 @@
 <script>
 import NavTabs from "../components/NavTabs.vue";
 import RestaurantCardVue from "@/components/RestaurantCard.vue";
+import RestaurantsNavPillsVue from "@/components/RestaurantsNavPills.vue";
+import RestaurantsPagination from "../components/RestaurantsPagination.vue";
 
 const dummyData = {
   restaurants: [
@@ -300,6 +310,8 @@ export default {
   components: {
     NavTabs,
     RestaurantCardVue,
+    RestaurantsNavPillsVue,
+    RestaurantsPagination,
   },
   data() {
     return {
@@ -307,7 +319,9 @@ export default {
       categories: [],
       categoryId: -1,
       currentPage: 1,
-      totalPage: -1,
+      totalPage: [],
+      previouPage: -1,
+      nextPage: -1,
     };
   },
   methods: {
@@ -317,6 +331,8 @@ export default {
       this.categoryId = dummyData.categoryId;
       this.currentPage = dummyData.page;
       this.totalPage = dummyData.totalPage;
+      this.previouPage = dummyData.prev;
+      this.nextPage = dummyData.next;
     },
   },
   created() {
