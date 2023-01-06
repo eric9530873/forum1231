@@ -41,7 +41,7 @@ export default {
   mixins: [fromNowFilter],
   props: {
     restaurantComments: {
-      type: Object,
+      type: Array,
       require: true,
     },
   },
