@@ -84,10 +84,11 @@ export default {
       };
     },
     addLiked() {
-      this.restaruant = {
+      (this.restaruant = {
         ...this.restaruant,
         isLiked: true,
-      };
+      }),
+        console.log(this.restaruant);
     },
     deleteLiked() {
       this.restaruant = {
