@@ -1,6 +1,5 @@
 <template>
   <div class="container py-5">
-    <h1>餐廳描述頁</h1>
     <!-- 餐廳資訊頁 RestaurantDetail -->
     <RestaurantDetail
       :initialuserrestaurant="restaurant"
@@ -8,14 +7,22 @@
     />
     <hr />
     <!-- 餐廳評論 RestaurantComments -->
-    <RestaurantCommentsVue :restaurantComments="restaurantComments" />
+    <RestaurantCommentsVue
+      :restaurantComments="restaurantComments"
+      @after-delete-comment="afterDeleteComment"
+    />
     <!-- 新增評論 CreateComment -->
+    <CreateCommentVue
+      :restaurantId="restaurant.id"
+      @after-create-comment="afterCreateComment"
+    />
   </div>
 </template>
 
 <script>
 import RestaurantDetail from "../components/RestaurantDetail.vue";
 import RestaurantCommentsVue from "@/components/RestaurantComments.vue";
+import CreateCommentVue from "@/components/CreateComment.vue";
 
 const dummyData = {
   restaurant: {
@@ -103,12 +110,22 @@ const dummyData = {
   isFavorited: false,
   isLiked: false,
 };
-
+const dummyUser = {
+  currentUser: {
+    id: 1,
+    name: "root",
+    email: "root@example.com",
+    image: null,
+    isAdmin: true,
+  },
+  isAuthenticated: true,
+};
 export default {
   name: "RestaurantModal",
   components: {
     RestaurantDetail,
     RestaurantCommentsVue,
+    CreateCommentVue,
   },
   data() {
     return {
@@ -125,32 +142,54 @@ export default {
         isLiked: false,
       },
       restaurantComments: [],
+      currentUser: dummyUser.currentUser,
     };
   },
   methods: {
-    fetchRestaurantModal() {
-      (this.restaurant = {
-        id: dummyData.restaurant.id,
-        name: dummyData.restaurant.name,
-        categoryName: dummyData.restaurant.Category
-          ? dummyData.restaurant.Category.name
-          : "未分類",
-        image: dummyData.restaurant.image,
-        openingHours: dummyData.restaurant.opening_hours,
-        tel: dummyData.restaurant.tel,
-        address: dummyData.restaurant.address,
-        description: dummyData.restaurant.description,
-        isFavorited: dummyData.isFavorited,
-        isLiked: dummyData.isLiked,
-      }),
+    fetchRestaurantModal(restaurantId) {
+      console.log(
+        "fetchRestaurant id: ",
+        restaurantId
+      )(
+        (this.restaurant = {
+          id: dummyData.restaurant.id,
+          name: dummyData.restaurant.name,
+          categoryName: dummyData.restaurant.Category
+            ? dummyData.restaurant.Category.name
+            : "未分類",
+          image: dummyData.restaurant.image,
+          openingHours: dummyData.restaurant.opening_hours,
+          tel: dummyData.restaurant.tel,
+          address: dummyData.restaurant.address,
+          description: dummyData.restaurant.description,
+          isFavorited: dummyData.isFavorited,
+          isLiked: dummyData.isLiked,
+        })
+      ),
         (this.restaurantComments = dummyData.restaurant.Comments);
+    },
+    afterDeleteComment(commentId) {
+      this.restaurantComments = this.restaurantComments.filter(
+        (comment) => commentId !== comment.id
+      );
+    },
+    afterCreateComment(payload) {
+      const { commentId, restaurantId, text } = payload;
+      this.restaurantComments.push({
+        id: commentId,
+        RestaurantId: restaurantId,
+        User: {
+          id: this.currentUser.id,
+          name: this.currentUser.name,
+        },
+        text,
+        createdAt: new Date(),
+      });
     },
   },
   created() {
-    const restaurantId = this.$route.params;
+    const { id: restaurantId } = this.$route.params;
     this.fetchRestaurantModal(restaurantId);
-
-    console.log(this.$route.params);
   },
 };
 </script>

@@ -8,6 +8,7 @@
           type="button"
           class="btn btn-danger float-right"
           v-if="currentUser.isAdmin"
+          @click="handleDeleteButtonClick(comment.id)"
         >
           Delete
         </button>
@@ -49,6 +50,11 @@ export default {
     return {
       currentUser: dummyUser.currentUser,
     };
+  },
+  methods: {
+    handleDeleteButtonClick(commentId) {
+      this.$emit("after-delete-comment", commentId);
+    },
   },
 };
 </script>

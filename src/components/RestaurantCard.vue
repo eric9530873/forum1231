@@ -10,7 +10,11 @@
       />
       <div class="card-body">
         <p class="card-text title-wrap">
-          <a href="#"> {{ restaruant.name }} </a>
+          <router-link
+            :to="{ name: 'restaurant', params: { id: restaurant.id } }"
+          >
+            {{ restaruant.name }}
+          </router-link>
         </p>
         <span class="badge badge-secondary">{{
           restaruant.Category.name ? restaruant.Category.name : "未分類"
