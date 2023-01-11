@@ -3,7 +3,7 @@
     <div class="card mb-4">
       <img
         class="card-img-top"
-        :src="restaruant.image"
+        :src="restaurant.image"
         alt="Card image cap"
         width="286px"
         height="180px"
@@ -13,21 +13,21 @@
           <router-link
             :to="{ name: 'restaurant', params: { id: restaurant.id } }"
           >
-            {{ restaruant.name }}
+            {{ restaurant.name }}
           </router-link>
         </p>
         <span class="badge badge-secondary">{{
-          restaruant.Category.name ? restaruant.Category.name : "未分類"
+          restaurant.Category.name ? restaurant.Category.name : "未分類"
         }}</span>
         <p class="card-text text-truncate">
-          {{ restaruant.description }}
+          {{ restaurant.description }}
         </p>
       </div>
       <div class="card-footer">
         <button
           type="button"
           class="btn btn-danger btn-border favorite mr-2"
-          v-if="restaruant.isFavorited"
+          v-if="restaurant.isFavorited"
           @click="deleteFavorited"
         >
           移除最愛
@@ -43,7 +43,7 @@
         <button
           type="button"
           class="btn btn-danger like mr-2"
-          v-if="restaruant.isLiked"
+          v-if="restaurant.isLiked"
           @click="deleteLiked"
         >
           Unlike
@@ -71,32 +71,32 @@ export default {
   },
   data() {
     return {
-      restaruant: this.initialrestaurant,
+      restaurant: this.initialrestaurant,
     };
   },
   methods: {
     addFavorited() {
-      this.restaruant = {
-        ...this.restaruant,
+      this.restaurant = {
+        ...this.restaurant,
         isFavorited: true,
       };
     },
     deleteFavorited() {
-      this.restaruant = {
-        ...this.restaruant,
+      this.restaurant = {
+        ...this.restaurant,
         isFavorited: false,
       };
     },
     addLiked() {
-      (this.restaruant = {
-        ...this.restaruant,
+      (this.restaurant = {
+        ...this.restaurant,
         isLiked: true,
       }),
-        console.log(this.restaruant);
+        console.log(this.restaurant);
     },
     deleteLiked() {
-      this.restaruant = {
-        ...this.restaruant,
+      this.restaurant = {
+        ...this.restaurant,
         isLiked: false,
       };
     },

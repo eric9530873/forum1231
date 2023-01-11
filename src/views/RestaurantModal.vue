@@ -146,26 +146,21 @@ export default {
     };
   },
   methods: {
-    fetchRestaurantModal(restaurantId) {
-      console.log(
-        "fetchRestaurant id: ",
-        restaurantId
-      )(
-        (this.restaurant = {
-          id: dummyData.restaurant.id,
-          name: dummyData.restaurant.name,
-          categoryName: dummyData.restaurant.Category
-            ? dummyData.restaurant.Category.name
-            : "未分類",
-          image: dummyData.restaurant.image,
-          openingHours: dummyData.restaurant.opening_hours,
-          tel: dummyData.restaurant.tel,
-          address: dummyData.restaurant.address,
-          description: dummyData.restaurant.description,
-          isFavorited: dummyData.isFavorited,
-          isLiked: dummyData.isLiked,
-        })
-      ),
+    fetchRestaurantModal() {
+      (this.restaurant = {
+        id: dummyData.restaurant.id,
+        name: dummyData.restaurant.name,
+        categoryName: dummyData.restaurant.Category
+          ? dummyData.restaurant.Category.name
+          : "未分類",
+        image: dummyData.restaurant.image,
+        openingHours: dummyData.restaurant.opening_hours,
+        tel: dummyData.restaurant.tel,
+        address: dummyData.restaurant.address,
+        description: dummyData.restaurant.description,
+        isFavorited: dummyData.isFavorited,
+        isLiked: dummyData.isLiked,
+      }),
         (this.restaurantComments = dummyData.restaurant.Comments);
     },
     afterDeleteComment(commentId) {

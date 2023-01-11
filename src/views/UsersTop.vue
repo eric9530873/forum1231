@@ -75,15 +75,6 @@ export default {
     fetchUsers() {
       this.users = dummyData.users;
     },
-    addFollow() {
-      console.log(this.user);
-    },
-    deleteFollow() {
-      this.user = {
-        ...this.user,
-        isFollowed: false,
-      };
-    },
   },
   created() {
     this.fetchUsers();

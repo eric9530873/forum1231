@@ -25,6 +25,7 @@
 
 <script>
 export default {
+  name: "UserCard",
   props: {
     initialuser: {
       type: Object,

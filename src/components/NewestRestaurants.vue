@@ -4,7 +4,10 @@
     <div class="card-body">
       <div v-for="restaurant in restaurants" v-bind:key="restaurant.id">
         <h4>
-          <a href="#">{{ restaurant.name }}</a>
+          <router-link
+            :to="{ name: 'restaurant', params: { id: restaurant.id } }"
+            >{{ restaurant.name }}</router-link
+          >
           <small>{{
             restaurant.Category.name ? restaurant.Category.name : "未分類"
           }}</small>
