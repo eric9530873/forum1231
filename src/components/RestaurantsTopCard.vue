@@ -59,14 +59,14 @@ export default {
       console.log("456");
       this.restaurant = {
         ...this.restaurant,
-        isFavorited: true,
+        isFavorited: false,
       };
     },
     addFavorite() {
       console.log("123");
       this.restaurant = {
         ...this.restaurant,
-        isFavorited: false,
+        isFavorited: true,
       };
     },
   },
