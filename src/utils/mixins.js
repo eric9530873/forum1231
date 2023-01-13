@@ -10,3 +10,11 @@ export const fromNowFilter = {
         },
     }
 }
+
+export const emptyImageFilter = {
+    filters: {
+        emptyImage(src) {
+            return src || " https://fakeimg.pl/";
+        },
+    }
+}
