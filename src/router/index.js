@@ -69,9 +69,19 @@ const routes = [
     component: () => import('../views/AdminRestaurants')
   },
   {
+    path: '/admin/restaurants/new',
+    name: 'admin-restaurants-new',
+    component: () => import('../views/AdminRestaurantNew')
+  },
+  {
     path: '/admin/restaurants/:id',
     name: 'admin-restaurant',
     component: () => import('../views/AdminRestaurant')
+  },
+  {
+    path: '/admin/restaurants/:id/edit',
+    name: 'admin-restaurant-edit',
+    component: () => import('../views/AdminRestaurantEdit')
   },
   {
     path: '*',
