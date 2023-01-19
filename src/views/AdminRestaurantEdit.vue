@@ -1,6 +1,9 @@
 <template>
   <div class="container py-5">
-    <AdminRestaurantForm :initial-restaurant="restaurant" />
+    <AdminRestaurantForm
+      :initialrestaurant="restaurant"
+      @after-submit="handleAferSubmit"
+    />
   </div>
 </template>
 
@@ -54,6 +57,11 @@ export default {
         image: dummyData.restaurant.image,
         categoryId: dummyData.restaurant.CategoryId,
       };
+    },
+    handleAferSubmit(formData) {
+      for (let [name, value] of formData.entries()) {
+        console.log(name + ":" + value);
+      }
     },
   },
   created() {

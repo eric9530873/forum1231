@@ -1,10 +1,16 @@
 <template>
   <div class="card">
-    <div class="card-header"><strong>1</strong> 已評論餐廳</div>
+    <div class="card-header">
+      <strong>{{ profile.profile.Comments.length }}</strong> 已評論餐廳
+    </div>
     <div class="card-body">
-      <a href="/restaurants/231">
+      <a
+        href="/restaurants/231"
+        v-for="comment in profile.profile.Comments"
+        :key="comment.id"
+      >
         <img
-          src="https://i.imgur.com/i9lZ216.jpeg"
+          :src="comment.Restaurant.image"
           width="60"
           height="60"
           class="avatar"
@@ -13,3 +19,15 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: "UserCommentsCard",
+  props: {
+    profile: {
+      type: Object,
+      require: true,
+    },
+  },
+};
+</script>

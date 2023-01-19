@@ -5,13 +5,12 @@
       (追蹤者)
     </div>
     <div class="card-body">
-      <a href="/users/11">
-        <img
-          :src="profile.profile.Followings.image"
-          width="60"
-          height="60"
-          class="avatar"
-        />
+      <a
+        href="/users/11"
+        v-for="following in profile.profile.Followings"
+        :key="following.id"
+      >
+        <img :src="following.image" width="60" height="60" class="avatar" />
       </a>
     </div>
   </div>

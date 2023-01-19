@@ -6,7 +6,7 @@
         <div class="ml-auto d-flex align-items-center">
           <!-- is user is admin -->
           <router-link
-            to="/admin/restaurants"
+            to="/admin"
             class="text-white mr-3"
             v-if="currentUser.isAdmin"
           >

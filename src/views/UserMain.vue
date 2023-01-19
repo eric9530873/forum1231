@@ -7,12 +7,12 @@
           <div class="col-md-4">
             <UserFollowingsCard :profile="profile" />
             <br />
-            <UserFollowersCard :profile="profile.profile" />
+            <UserFollowersCard :profile="profile" />
           </div>
           <div class="col-md-8">
-            <UserCommentsCard />
+            <UserCommentsCard :profile="profile" />
             <br />
-            <UserFavoritedRestaurantsCard />
+            <UserFavoritedRestaurantsCard :profile="profile" />
           </div>
         </div>
       </div>

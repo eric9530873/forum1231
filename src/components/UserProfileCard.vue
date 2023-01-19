@@ -27,24 +27,34 @@
             </li>
           </ul>
           <p></p>
-          <form style="display: contents">
-            <button
-              v-if="profile.isFollowed"
-              type="submit"
-              class="btn btn-danger"
-              @click="deleteFollow"
-            >
-              取消追蹤
-            </button>
-            <button
-              v-else
-              @click="addFollow"
-              type="submit"
-              class="btn btn-primary"
-            >
-              追蹤
-            </button>
-          </form>
+          <template>
+            <div style="display: contents" v-if="profile.profile.isAdmin">
+              <router-link
+                :to="{ name: 'user-edit', params: { id: profile.profile.id } }"
+                class="btn btn-primary mb-4"
+              >
+                EDIT
+              </router-link>
+            </div>
+            <form style="display: contents" v-else>
+              <button
+                v-if="profile.isFollowed"
+                type="submit"
+                class="btn btn-danger"
+                @click="deleteFollow"
+              >
+                取消追蹤
+              </button>
+              <button
+                v-else
+                @click="addFollow"
+                type="submit"
+                class="btn btn-primary"
+              >
+                追蹤
+              </button>
+            </form>
+          </template>
           <p></p>
         </div>
       </div>
