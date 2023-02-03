@@ -8,7 +8,7 @@
       </div>
       <div class="col-md-8">
         <div class="card-body">
-          <h5 class="card-title">Mrs. Mckenzie Johnston</h5>
+          <h5 class="card-title">{{ restaurant.name }}</h5>
           <span class="badge badge-secondary"
             >收藏數：{{ restaurant.FavoriteCount }}</span
           >
@@ -19,14 +19,14 @@
 
           <button
             v-if="restaurant.isFavorited"
-            @click="deleteFavorite"
+            @click="deleteFavorite(restaurant.id)"
             type="button"
             class="btn btn-danger mr-2"
           >
             移除最愛
           </button>
           <button
-            @click="addFavorite"
+            @click="addFavorite(restaurant.id)"
             v-else
             type="button"
             class="btn btn-primary"
@@ -41,6 +41,8 @@
 
 
 <script>
+import usersAPI from "../apis/users";
+import { Toast } from "@/utils/helpers";
 export default {
   name: "RestaurantsTopCard",
   props: {
@@ -55,19 +57,41 @@ export default {
     };
   },
   methods: {
-    deleteFavorite() {
-      console.log("456");
-      this.restaurant = {
-        ...this.restaurant,
-        isFavorited: false,
-      };
+    async deleteFavorite(restaurantId) {
+      try {
+        const response = await usersAPI.deleteFavorite({ restaurantId });
+        if (response.data.status === "error") {
+          throw new Error(response.data.message);
+        }
+        this.restaurant = {
+          ...this.restaurant,
+          isFavorited: false,
+          FavoriteCount: this.restaurant.FavoriteCount - 1,
+        };
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "無法",
+        });
+      }
     },
-    addFavorite() {
-      console.log("123");
-      this.restaurant = {
-        ...this.restaurant,
-        isFavorited: true,
-      };
+    async addFavorite(restaurantId) {
+      try {
+        const response = await usersAPI.addFavorite({ restaurantId });
+        if (response.data.status === "error") {
+          throw new Error(response.data.message);
+        }
+        this.restaurant = {
+          ...this.restaurant,
+          isFavorited: true,
+          FavoriteCount: this.restaurant.FavoriteCount + 1,
+        };
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "無法",
+        });
+      }
     },
   },
 };

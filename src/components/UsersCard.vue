@@ -12,11 +12,16 @@
         type="button"
         class="btn btn-danger"
         v-if="user.isFollowed"
-        @click="deletdFollowed"
+        @click="deletdFollowed(user.id)"
       >
         取消追蹤
       </button>
-      <button type="button" class="btn btn-primary" v-else @click="addFollowed">
+      <button
+        type="button"
+        class="btn btn-primary"
+        v-else
+        @click="addFollowed(user.id)"
+      >
         追蹤
       </button>
     </p>
@@ -24,6 +29,9 @@
 </template>
 
 <script>
+import userAPI from "../apis/users";
+import { Toast } from "@/utils/helpers";
+
 export default {
   name: "UserCard",
   props: {
@@ -38,17 +46,44 @@ export default {
     };
   },
   methods: {
-    addFollowed() {
-      this.user = {
-        ...this.user,
-        isFollowed: true,
-      };
+    async addFollowed(userId) {
+      try {
+        const response = await userAPI.addFollowing({ userId });
+        if (response.data.status !== "success") {
+          throw new Error(response.data.message);
+        }
+        console.log(this.user.FollowerCount);
+        this.user = {
+          ...this.user,
+          isFollowed: true,
+          FollowerCount: this.user.FollowerCount + 1,
+        };
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "無法執行",
+        });
+      }
     },
-    deletdFollowed() {
-      this.user = {
-        ...this.user,
-        isFollowed: false,
-      };
+    async deletdFollowed(userId) {
+      try {
+        const response = await userAPI.deleteFollowing({ userId });
+        console.log(response);
+        if (response.data.status !== "success") {
+          throw new Error(response.data.message);
+        }
+        console.log(this.user.FollowerCount);
+        this.user = {
+          ...this.user,
+          isFollowed: false,
+          FollowerCount: this.user.FollowerCount - 1,
+        };
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "無法執行",
+        });
+      }
     },
   },
 };
