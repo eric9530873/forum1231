@@ -15,7 +15,13 @@
 
     <div class="form-group">
       <label for="categoryId">Category</label>
-      <select id="categoryId" class="form-control" name="categoryId" required>
+      <select
+        id="categoryId"
+        class="form-control"
+        name="categoryId"
+        v-model="restaurant.categoryId"
+        required
+      >
         <option value="" selected disabled>--請選擇--</option>
         <option
           v-for="category in categories"
