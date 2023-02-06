@@ -9,21 +9,8 @@
 
 <script>
 import AdminRestaurantForm from "@/components/AdminRestaurantForm.vue";
-
-const dummyData = {
-  restaurant: {
-    id: 2,
-    name: "Arturo Gutkowski V",
-    tel: "266-503-9714 x54129",
-    address: "1110 Boehm Lakes",
-    opening_hours: "08:00",
-    description:
-      "Mollitia saepe eaque id quaerat. Suscipit sed autem consequatur temporibus delectus ducimus maiores. Quo quia porro explicabo iure commodi et saepe praesentium.",
-    image:
-      "https://loremflickr.com/320/240/restaurant,food/?random=94.62756455455612",
-    CategoryId: 3,
-  },
-};
+import adminAPI from "../apis/admin";
+import { Toast } from "@/utils/helpers";
 
 export default {
   name: "AdminRestaurantEdit",
@@ -45,18 +32,26 @@ export default {
     };
   },
   methods: {
-    fetchRestaurant() {
-      this.restaurant = {
-        ...this.restaurant,
-        id: dummyData.restaurant.id,
-        name: dummyData.restaurant.name,
-        tel: dummyData.restaurant.tel,
-        address: dummyData.restaurant.address,
-        openingHours: dummyData.restaurant.opening_hours,
-        description: dummyData.restaurant.description,
-        image: dummyData.restaurant.image,
-        categoryId: dummyData.restaurant.CategoryId,
-      };
+    async fetchRestaurant(restaurantId) {
+      try {
+        const response = await adminAPI.restaurants.getDetail({ restaurantId });
+        this.restaurant = {
+          ...this.restaurant,
+          id: response.data.restaurant.id,
+          name: response.data.restaurant.name,
+          tel: response.data.restaurant.tel,
+          address: response.data.restaurant.address,
+          openingHours: response.data.restaurant.opening_hours,
+          description: response.data.restaurant.description,
+          image: response.data.restaurant.image,
+          categoryId: response.data.restaurant.CategoryId,
+        };
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "無法取得",
+        });
+      }
     },
     handleAferSubmit(formData) {
       for (let [name, value] of formData.entries()) {
