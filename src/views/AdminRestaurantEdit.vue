@@ -3,6 +3,7 @@
     <AdminRestaurantForm
       :initialrestaurant="restaurant"
       @after-submit="handleAferSubmit"
+      :isprocessing="isProcessing"
     />
   </div>
 </template>
@@ -29,7 +30,13 @@ export default {
         image: "",
         openingHours: "",
       },
+      isProcessing: false,
     };
+  },
+  beforeRouteUpdate(to, from, next) {
+    console.log({ to, from, next });
+    this.fetchRestaurant(to.params.id);
+    next();
   },
   methods: {
     async fetchRestaurant(restaurantId) {
@@ -53,9 +60,23 @@ export default {
         });
       }
     },
-    handleAferSubmit(formData) {
-      for (let [name, value] of formData.entries()) {
-        console.log(name + ":" + value);
+    async handleAferSubmit(formData) {
+      try {
+        this.isProcessing = true;
+        const response = await adminAPI.restaurants.upDate({
+          restaurantId: this.restaurant.id,
+          formData,
+        });
+        if (response.data.status !== "success") {
+          throw new Error(response.data.message);
+        }
+        this.$router.push({ name: "admin-restaurants" });
+      } catch (error) {
+        this.isProcessing = false;
+        Toast.fire({
+          icon: "error",
+          title: "無法更新餐廳資料",
+        });
       }
     },
   },
