@@ -43,29 +43,8 @@
 
 <script>
 import { emptyImageFilter } from "@/utils/mixins";
-const dummyData = {
-  restaurant: {
-    id: 2,
-    name: "Arturo Gutkowski V",
-    tel: "266-503-9714 x54129",
-    address: "1110 Boehm Lakes",
-    opening_hours: "08:00",
-    description:
-      "Mollitia saepe eaque id quaerat. Suscipit sed autem consequatur temporibus delectus ducimus maiores. Quo quia porro explicabo iure commodi et saepe praesentium.",
-    image:
-      "https://loremflickr.com/320/240/restaurant,food/?random=94.62756455455612",
-    viewCounts: 1,
-    createdAt: "2023-01-04T03:05:03.000Z",
-    updatedAt: "2023-01-06T08:45:14.000Z",
-    CategoryId: 3,
-    Category: {
-      id: 3,
-      name: "義大利料理",
-      createdAt: "2023-01-04T03:05:03.000Z",
-      updatedAt: "2023-01-04T03:05:03.000Z",
-    },
-  },
-};
+import adminAPI from "../apis/admin";
+import { Toast } from "@/utils/helpers";
 
 export default {
   name: "AdminRestaurant",
@@ -85,20 +64,35 @@ export default {
     };
   },
   methods: {
-    fetchRestaurant() {
-      const { restaurant } = dummyData;
-      this.restaurant = {
-        ...this.restaurant,
-        id: restaurant.id,
-        name: restaurant.name,
-        categoryName: restaurant.Category.name,
-        image: restaurant.image,
-        openingHours: restaurant.opening_hours,
-        tel: restaurant.tel,
-        address: restaurant.address,
-        description: restaurant.description,
-      };
+    async fetchRestaurant(restaurantId) {
+      try {
+        const response = await adminAPI.restaurants.getDetail({
+          restaurantId,
+        });
+        console.log(response);
+        this.restaurant = {
+          ...this.restaurant,
+          id: response.data.restaurant.id,
+          name: response.data.restaurant.name,
+          categoryName: response.data.restaurant.Category.name,
+          image: response.data.restaurant.image,
+          openingHours: response.data.restaurant.opening_hours,
+          tel: response.data.restaurant.tel,
+          address: response.data.restaurant.address,
+          description: response.data.restaurant.description,
+        };
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "無法顯示",
+        });
+      }
     },
+  },
+  beforeRouteUpdate(to, from, next) {
+    console.log(to, from);
+    this.fetchRestaurant(to.params.id);
+    next();
   },
   mounted() {
     const { id: restaurantId } = this.$route.params;

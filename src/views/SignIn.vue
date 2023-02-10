@@ -83,11 +83,15 @@ export default {
           email: this.email,
           password: this.password,
         });
+
         const { data } = response;
         if (data.status !== "success") {
           throw new Error(data.message);
         }
         localStorage.setItem("token", data.token);
+
+        this.$store.commit("setcurrentuser", data.user);
+
         this.$router.push("/restaurants");
       } catch (error) {
         //改回false
