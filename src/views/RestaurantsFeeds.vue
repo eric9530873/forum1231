@@ -52,10 +52,6 @@ export default {
           title: "無法取得資料",
         });
       }
-      // this.restaurants = dummyData.restaurants;
-      // this.comments = dummyData.comments.filter(
-      //   (comment) => comment.Restaurant && comment.text
-      // );
     },
   },
   created() {
