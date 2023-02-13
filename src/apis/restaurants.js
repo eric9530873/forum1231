@@ -15,6 +15,8 @@ export default {
     getRestaurantsTop() {
         return apiHelper.get('/restaurants/top', { headers: { Authorization: `Bearer ${getToken()}` } })
     },
-
+    getRestaurantDashboard({ restaurantId }) {
+        return apiHelper.get(`/restaurants/${restaurantId}/dashboard`, { headers: { Authorization: `Bearer ${getToken()}` } })
+    }
 
 }

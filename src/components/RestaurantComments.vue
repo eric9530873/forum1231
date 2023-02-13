@@ -4,12 +4,8 @@
 
     <div v-for="comment in restaurantComments" :key="comment.id">
       <blockquote class="blockquote mb-0">
-        <button
-          type="button"
-          class="btn btn-danger float-right"
-          v-if="currentUser.isAdmin"
-          @click="handleDeleteButtonClick(comment.id)"
-        >
+        <button type="button" class="btn btn-danger float-right" v-if="currentUser.isAdmin"
+          @click="handleDeleteButtonClick(comment.id)">
           Delete
         </button>
         <h3>
@@ -27,16 +23,10 @@
 
 <script>
 import { fromNowFilter } from "../utils/mixins";
+import { mapState } from "vuex";
+import { Toast } from "@/utils/helpers";
+import commentsAPI from '../apis/comments'
 
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: "root",
-    email: "root@example.com",
-    isAdmin: true,
-  },
-  isAuthenticated: true,
-};
 export default {
   name: "restaurantComments",
   mixins: [fromNowFilter],
@@ -46,15 +36,24 @@ export default {
       require: true,
     },
   },
-  data() {
-    return {
-      currentUser: dummyUser.currentUser,
-    };
-  },
+
   methods: {
-    handleDeleteButtonClick(commentId) {
+    async handleDeleteButtonClick(commentId) {
+      try {
+        const response = await commentsAPI.delete({ commentId })
+        console.log(response)
+        this.$emit("after-delete-comment", commentId);
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法刪除'
+        })
+      }
       this.$emit("after-delete-comment", commentId);
     },
+  },
+  computed: {
+    ...mapState(['currentUser'])
   },
 };
 </script>

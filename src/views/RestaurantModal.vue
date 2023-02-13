@@ -1,21 +1,12 @@
 <template>
   <div class="container py-5">
     <!-- 餐廳資訊頁 RestaurantDetail -->
-    <RestaurantDetail
-      :initialuserrestaurant="restaurant"
-      :key="restaurant.id"
-    />
+    <RestaurantDetail :initialuserrestaurant="restaurant" :key="restaurant.id" />
     <hr />
     <!-- 餐廳評論 RestaurantComments -->
-    <RestaurantCommentsVue
-      :restaurantComments="restaurantComments"
-      @after-delete-comment="afterDeleteComment"
-    />
+    <RestaurantCommentsVue :restaurantComments="restaurantComments" @after-delete-comment="afterDeleteComment" />
     <!-- 新增評論 CreateComment -->
-    <CreateCommentVue
-      :restaurantId="restaurant.id"
-      @after-create-comment="afterCreateComment"
-    />
+    <CreateCommentVue :restaurantId="restaurant.id" @after-create-comment="afterCreateComment" />
   </div>
 </template>
 

@@ -14,7 +14,10 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from "uuid";
+
+import commentsAPI from "@/apis/comments";
+import { Toast } from "@/utils/helpers";
+
 export default {
   name: "CreateComment",
   props: {
@@ -29,13 +32,32 @@ export default {
     };
   },
   methods: {
-    handleSubmit() {
-      this.$emit("after-create-comment", {
-        commentId: uuidv4(),
-        restaurantId: this.restaurantId,
-        text: this.text,
-      }),
-        (this.text = "");
+    async handleSubmit() {
+      try {
+        if (!this.text) {
+          Toast.fire({
+            icon: 'warning',
+            title: '您尚未填寫任何評論'
+          })
+          return
+        }
+        const response = await commentsAPI.creat({ restaurantId: this.restaurantId, text: this.text })
+        if (response.data.status === 'error') {
+          throw new Error(response.data.message)
+        }
+        this.$emit("after-create-comment", {
+          commentId: response.data.commentId,
+          restaurantId: this.restaurantId,
+          text: this.text,
+        }),
+          (this.text = "");
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法新增評論'
+        })
+      }
+
     },
   },
 };
