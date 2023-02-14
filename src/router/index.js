@@ -95,6 +95,11 @@ const routes = [
     component: () => import('../views/AdminCategories')
   },
   {
+    path: '/admin/users',
+    name: 'admin-users',
+    component: () => import('../views/AdminUsers')
+  },
+  {
     path: '*',
     name: 'NotFound',
     component: NotFound

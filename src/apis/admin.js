@@ -32,5 +32,13 @@ export default {
         deleteRestaurant({ restaurantId }) {
             return apiHelper.delete(`admin/restaurants/${restaurantId}`, { headers: { Authorization: `Bearer ${getToken()}` } })
         }
+    },
+    users: {
+        get() {
+            return apiHelper.get('admin/users', { headers: { Authorization: `Bearer ${getToken()}` } })
+        },
+        upDate({ userId, isAdmin }) {
+            return apiHelper.put(`admin/users/${userId}`, { isAdmin }, { headers: { Authorization: `Bearer ${getToken()}` } })
+        }
     }
 }
