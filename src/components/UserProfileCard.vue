@@ -2,35 +2,35 @@
   <div class="card mb-3">
     <div class="row no-gutters">
       <div class="col-md-6">
-        <img :src="profile.profile.image" width="300px" height="300px" />
+        <img :src="profile.image" width="300px" height="300px" />
       </div>
       <div class="col-md-6">
         <div class="card-body">
-          <h5 class="card-title">{{ profile.profile.name }}</h5>
-          <p class="card-text">{{ profile.profile.email }}</p>
+          <h5 class="card-title">{{ profile.name }}</h5>
+          <p class="card-text">{{ profile.email }}</p>
           <ul class="list-unstyled list-inline">
             <li>
-              <strong>{{ profile.profile.Comments.length }}</strong>
+              <strong>{{ profile.Comments.length ? profile.Comments.length : '0'}}</strong>
               已評論餐廳
             </li>
             <li>
-              <strong>{{ profile.profile.FavoritedRestaurants.length }}</strong>
+              <strong>{{ profile.FavoritedRestaurants.length ? profile.FavoritedRestaurants.length : '0'}}</strong>
               收藏的餐廳
             </li>
             <li>
-              <strong>{{ profile.profile.Followers.length }}</strong>
+              <strong>{{ profile.Followers.length ? profile.Followers.length :'0' }}</strong>
               followings (追蹤者)
             </li>
             <li>
-              <strong>{{ profile.profile.Followings.length }}</strong>
+              <strong>{{ profile.Followings.length ? profile.Followings.length :'0' }}</strong>
               followers (追隨者)
             </li>
           </ul>
           <p></p>
           <template>
-            <div style="display: contents" v-if="profile.profile.isAdmin">
+            <div style="display: contents" v-if="this.currentUser.id === this.profile.id">
               <router-link
-                :to="{ name: 'user-edit', params: { id: profile.profile.id } }"
+                :to="{ name: 'user-edit', params: { id: profile.id } }"
                 class="btn btn-primary mb-4"
               >
                 EDIT
@@ -38,16 +38,16 @@
             </div>
             <form style="display: contents" v-else>
               <button
-                v-if="profile.isFollowed"
+                v-if="isFollowed"
                 type="submit"
                 class="btn btn-danger"
-                @click="deleteFollow"
+                @click="deleteFollow(profile.id)"
               >
                 取消追蹤
               </button>
               <button
                 v-else
-                @click="addFollow"
+                @click="addFollow(profile.id)"
                 type="submit"
                 class="btn btn-primary"
               >
@@ -63,6 +63,9 @@
 </template>
 
 <script>
+import usersAPI from '../apis/users'
+import { mapState } from 'vuex';
+import { Toast } from '@/utils/helpers';
 export default {
   name: "UserProfileCard",
   props: {
@@ -70,25 +73,60 @@ export default {
       type: Object,
       require: true,
     },
+    initialisfollowed:{
+      type:Boolean,
+      require:true
+    },
   },
   data() {
     return {
       profile: this.initialprofile,
+      isFollowed:this.initialisfollowed,
     };
   },
+  
   methods: {
-    deleteFollow() {
-      this.profile = {
-        ...this.profile,
-        isFollowed: false,
-      };
+    async deleteFollow() {
+      try{
+        const response = await usersAPI.deleteFollowing({userId:this.profile.id})
+        if(response.data.status === 'error'){
+          throw new Error(response.data.message)
+        }
+        this.profile = {
+          ...this.profile,
+          isFollowed: false,
+        };
+        this.isFollowed = false
+      }catch(error){
+        Toast.fire({
+          icon: 'error',
+          title: '無法取消追蹤'
+        })
+      }
+      
     },
-    addFollow() {
-      this.profile = {
-        ...this.profile,
-        isFollowed: true,
-      };
+    async addFollow() {
+      try{
+        const response = await usersAPI.addFollowing({userId:this.profile.id})
+        if (response.data.status === 'error') {
+          throw new Error(response.data.message)
+        }
+        this.profile = {
+          ...this.profile,
+          isFollowed: true,
+        };
+        this.isFollowed = true
+      }catch(error){
+        Toast.fire({
+          icon: 'error',
+          title: '無法追蹤'
+        })
+      }
+        
     },
+  },
+  computed: {
+    ...mapState(["currentUser"]),
   },
 };
 </script>

@@ -41,17 +41,13 @@
 
 
 <script>
+import { mapState } from 'vuex';
+import { Toast } from '@/utils/helpers';
+import usersAPI from '../apis/users'
+
 export default {
   name: "UserEdit",
-  data() {
-    return {
-      currentUser: {
-        id: -1,
-        name: "",
-        image: "",
-      },
-    };
-  },
+  
   methods: {
     handleFileChange(e) {
       console.log(e.target.files);
@@ -62,6 +58,35 @@ export default {
         this.currentUser.image = imageURL;
       }
     },
+    async handleSubmit(e){
+      try{
+        if (!this.name) {
+          Toast.fire({
+            icon: 'warning',
+            title: '您尚未填寫姓名'
+          })
+          return
+        }
+        const form = e.target
+        const formData = new FormData(form)
+
+        const response = await usersAPI.upDate({userId:this.currentUser.id,formData})
+
+        if (response.data.status === 'error') {
+          throw new Error(response.data.message)
+        }
+
+        this.$router.push({ name: 'user', params: { id: this.currentUser.id } })
+      }catch(error){
+        Toast.fire({
+          icon:'error',
+          title:'無法送出'
+        })
+      }
+    }
   },
+  computed:{
+    ...mapState(['currentUser'])
+  }
 };
 </script>

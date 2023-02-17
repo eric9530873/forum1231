@@ -29,5 +29,8 @@ export default {
     getTopUsers() {
         return apiHelper.get(`/users/top`, { headers: { Authorization: `Bearer ${getToken()}` } })
     },
+    upDate({ userId, formData }) {
+        return apiHelper.put(`/users/${userId}`, formData, { headers: { Authorization: `Bearer ${getToken()}` } })
+    }
 
 }

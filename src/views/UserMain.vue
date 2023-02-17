@@ -2,7 +2,7 @@
   <div class="main">
     <div class="album py-5">
       <div class="container">
-        <UserProfileCard :initialprofile="profile" :key="profile.profile.id" />
+        <UserProfileCard :initialprofile="profile" :initialisfollowed="isFollowed" :key="profile.id" />
         <div class="row">
           <div class="col-md-4">
             <UserFollowingsCard :profile="profile" />
@@ -31,6 +31,7 @@ import UserCommentsCard from "@/components/UserCommentsCard.vue";
 import UserFavoritedRestaurantsCard from "@/components/UserFavoritedRestaurantsCard.vue";
 import usersAPI from '../apis/users'
 import { Toast } from "@/utils/helpers";
+import { mapState } from "vuex";
 
 
 export default {
@@ -44,7 +45,8 @@ export default {
   },
   data() {
     return {
-      profile: [],
+      profile: {},
+      isFollowed:'',
     };
   },
   methods: {
@@ -52,6 +54,8 @@ export default {
       try{
         const response = await usersAPI.get({userId})
         console.log(response)
+        this.profile = response.data.profile
+        this.isFollowed = response.data.isFollowed
       }catch(error){
         Toast.fire({
           icon:'error',
@@ -62,8 +66,15 @@ export default {
     },
   },
   created() {
-    // const {id} = this.$route.params
-    this.fetchProfile();
+    const { id:userId } = this.$route.params
+    this.fetchProfile(userId);
+  },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
+  beforeRouteUpdate(to, from, next) {
+    this.fetchProfile(to.params.id)
+    next()
   },
 };
 </script>

@@ -1,12 +1,12 @@
 <template>
   <div class="card">
     <div class="card-header">
-      <strong>{{ profile.profile.Comments.length }}</strong> 已評論餐廳
+      <strong>{{ profile.Comments.length ? profile.Comments.length :'0' }}</strong> 已評論餐廳
     </div>
     <div class="card-body">
       <a
         href="/restaurants/231"
-        v-for="comment in profile.profile.Comments"
+        v-for="comment in profile.Comments"
         :key="comment.id"
       >
         <img

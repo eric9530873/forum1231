@@ -1,13 +1,13 @@
 <template>
   <div class="card">
     <div class="card-header">
-      <strong>{{ profile.profile.Followings.length }}</strong> followings
+      <strong>{{ profile.Followings.length ? profile.Followings.length:'0' }}</strong> followings
       (追蹤者)
     </div>
     <div class="card-body">
       <a
         href="/users/11"
-        v-for="following in profile.profile.Followings"
+        v-for="following in profile.Followings"
         :key="following.id"
       >
         <img :src="following.image" width="60" height="60" class="avatar" />
