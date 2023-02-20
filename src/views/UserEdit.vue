@@ -1,6 +1,6 @@
 <template>
   <div class="container py-5">
-    <form>
+    <form  @submit.stop.prevent="handleSubmit">
       <div class="form-group">
         <label for="name">Name</label>
         <input
@@ -60,7 +60,7 @@ export default {
     },
     async handleSubmit(e){
       try{
-        if (!this.name) {
+        if (!this.currentUser.name) {
           Toast.fire({
             icon: 'warning',
             title: '您尚未填寫姓名'
@@ -68,6 +68,7 @@ export default {
           return
         }
         const form = e.target
+        console.log(e.target)
         const formData = new FormData(form)
 
         const response = await usersAPI.upDate({userId:this.currentUser.id,formData})
